@@ -37,11 +37,11 @@ const TaskBox = ({ task, setTask }) => {
   };
 
   return (
-    <div>
+    <div className="max-w-3xl mx-auto p-4">
       {task.map((val, index) => {
         return (
           <div
-            className="flex flex-row items-center justify-center mt-5"
+            className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 p-4 mb-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200"
             key={index}
           >
             {editIndex === index ? (
@@ -49,47 +49,56 @@ const TaskBox = ({ task, setTask }) => {
                 type="text"
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
-                className="px-2 py-2 border border-violet-500"
+                className="flex-grow px-4 py-2 border border-violet-300 rounded-md focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-transparent"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") saveEdit(index);
                 }}
               />
             ) : (
               <h1
-                className={`inline px-2 py-2 bg-violet-500 ${
-                  doneStates[index] ? "line-through" : "text-white"
-                }`}
+                className={`flex-grow px-4 py-2 rounded-md ${
+                  doneStates[index]
+                    ? "line-through text-gray-500 bg-gray-100"
+                    : "text-gray-800 bg-violet-50"
+                } font-medium`}
               >
                 {val}
               </h1>
             )}
-            <button
-              className="px-2 py-2 bg-red-500 ml-2"
-              onClick={() => toggleDone(index)}
-            >
-              done
-            </button>
-            {editIndex === index ? (
+            <div className="flex flex-row gap-2 mt-2 sm:mt-0">
               <button
-                className="px-2 py-2 bg-green-500 ml-2"
-                onClick={() => saveEdit(index)}
+                className={`px-4 py-2 rounded-md transition-colors duration-200 ${
+                  doneStates[index]
+                    ? "bg-green-500 hover:bg-green-600"
+                    : "bg-blue-500 hover:bg-blue-700"
+                } text-white font-medium`}
+                onClick={() => toggleDone(index)}
               >
-                Save
+                {doneStates[index] ? "Completed" : "Done"}
               </button>
-            ) : (
+
+              {editIndex === index ? (
+                <button
+                  className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md transition-colors duration-200 font-medium"
+                  onClick={() => saveEdit(index)}
+                >
+                  Save
+                </button>
+              ) : (
+                <button
+                  className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md transition-colors duration-200 font-medium"
+                  onClick={() => startEdit(index, val)}
+                >
+                  Edit
+                </button>
+              )}
               <button
-                className="px-2 py-2 bg-yellow-500 ml-2"
-                onClick={() => startEdit(index, val)}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md transition-colors duration-200 font-medium"
+                onClick={() => removeTask(index)}
               >
-                Edit
+                Remove
               </button>
-            )}
-            <button
-              className="px-2 py-2 bg-blue-500 ml-2"
-              onClick={() => removeTask(index)}
-            >
-              Remove
-            </button>
+            </div>
           </div>
         );
       })}
